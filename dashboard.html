@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>GTA Online Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #1c1c1c;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #b30000;
+      padding: 20px;
+      text-align: center;
+    }
+    header img {
+      height: 80px;
+    }
+    .container {
+      padding: 20px;
+    }
+    .section {
+      background: #2a2a2a;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    select, input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #e60000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .status {
+      margin-top: 10px;
+    }
+    .negocio {
+      margin-bottom: 20px;
+      background-color: #333;
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/GTA_Online_Logo.svg/2560px-GTA_Online_Logo.svg.png" alt="GTA Online Logo">
+  </header>  <div class="container">
+    <div class="section">
+      <h2>Saldo Bancário</h2>
+      <input type="number" id="bankBalance" placeholder="Insere o teu saldo" />
+    </div><div class="section">
+  <h2>Negócios</h2>
+  <div id="negociosContainer"></div>
+  <button onclick="guardarInfo()">Guardar</button>
+  <div class="status" id="status"></div>
+</div>
+
+  </div>  <script>
+    const NUM_NEGOCIOS = 20;
+
+    function criarNegocios() {
+      const container = document.getElementById('negociosContainer');
+      for (let i = 1; i <= NUM_NEGOCIOS; i++) {
+        const negocio = document.createElement('div');
+        negocio.classList.add('negocio');
+
+        negocio.innerHTML = `
+          <h3>Negócio ${i}</h3>
+          <label>Nome do Negócio:</label>
+          <input type="text" id="nome_${i}" placeholder="Ex: Cocaína, Documentos...">
+          <label>Localização:</label>
+          <select id="loc_${i}">
+            <option>Paleto Bay</option>
+            <option>Sandy Shores</option>
+            <option>Grapeseed</option>
+            <option>Mount Chiliad</option>
+            <option>Morningwood</option>
+            <option>San Chianski</option>
+            <option>East LS</option>
+          </select>
+          <label>Estoque:</label>
+          <input type="text" id="stock_${i}" placeholder="Ex: Cheio, 45%...">
+        `;
+
+        container.appendChild(negocio);
+      }
+    }
+
+    function guardarInfo() {
+      localStorage.setItem('saldo', document.getElementById('bankBalance').value);
+      for (let i = 1; i <= NUM_NEGOCIOS; i++) {
+        localStorage.setItem(`nome_${i}`, document.getElementById(`nome_${i}`).value);
+        localStorage.setItem(`loc_${i}`, document.getElementById(`loc_${i}`).value);
+        localStorage.setItem(`stock_${i}`, document.getElementById(`stock_${i}`).value);
+      }
+      document.getElementById('status').innerText = 'Guardado com sucesso!';
+    }
+
+    window.onload = () => {
+      document.getElementById('bankBalance').value = localStorage.getItem('saldo') || '';
+      criarNegocios();
+      for (let i = 1; i <= NUM_NEGOCIOS; i++) {
+        document.getElementById(`nome_${i}`).value = localStorage.getItem(`nome_${i}`) || '';
+        document.getElementById(`loc_${i}`).value = localStorage.getItem(`loc_${i}`) || 'Paleto Bay';
+        document.getElementById(`stock_${i}`).value = localStorage.getItem(`stock_${i}`) || '';
+      }
+    }
+  </script></body>
+</html>
