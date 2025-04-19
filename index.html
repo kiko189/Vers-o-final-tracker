@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA Tracker</title>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.8.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.8.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.8.3/firebase-analytics.js"></script>
+
+    <script>
+        // Configuração do Firebase com suas credenciais
+        const firebaseConfig = {
+            apiKey: "AIzaSyA91AoWZFOG1EbLz6p5OjfJd-Us-S9x4YQ",
+            authDomain: "gta-tracker-67774.firebaseapp.com",
+            projectId: "gta-tracker-67774",
+            storageBucket: "gta-tracker-67774.firebasestorage.app",
+            messagingSenderId: "2917447473",
+            appId: "1:2917447473:web:9e1700160ef16c065fa210",
+            measurementId: "G-MZLXKY3XMH"
+        };
+
+        // Inicializar o Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+    </script>
+
+    <script src="script.js"></script>
+</head>
+<body>
+    <!-- Formulário de Login -->
+    <h2>Login</h2>
+    <form id="login-form">
+        <input type="email" id="login-email" placeholder="Digite seu email" required>
+        <input type="password" id="login-password" placeholder="Digite sua senha" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <!-- Formulário de Cadastro (Signup) -->
+    <h2>Sign Up</h2>
+    <form id="signup-form">
+        <input type="email" id="signup-email" placeholder="Digite seu email" required>
+        <input type="password" id="signup-password" placeholder="Digite sua senha" required>
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <div id="user-info" style="display:none;">
+        <h3>Bem-vindo, <span id="user-name"></span></h3>
+        <button id="logout">Logout</button>
+    </div>
+
+    <script>
+        // Funcionalidade de Login
+        const loginForm = document.getElementById('login-form');
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                document.getElementById('user-name').textContent = user.email;
+                document.getElementById('user-info').style.display = 'block';
+            } catch (error) {
+                alert("Erro no login: " + error.message);
+            }
+        });
+
+        // Funcionalidade de Cadastro (Signup)
+        const signupForm = document.getElementById('signup-form');
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                document.getElementById('user-name').textContent = user.email;
+                document.getElementById('user-info').style.display = 'block';
+            } catch (error) {
+                alert("Erro no cadastro: " + error.message);
+            }
+        });
+
+        // Funcionalidade de Logout
+        const logoutButton = document.getElementById('logout');
+        logoutButton.addEventListener('click', async () => {
+            await auth.signOut();
+            document.getElementById('user-info').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
